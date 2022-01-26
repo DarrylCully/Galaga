@@ -1,0 +1,15 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F16D4249-6279-474E-8826-742E7FF7445C}") = "Galaga", "Galaga\Galaga.z80cdproj", "{E4CD32AF-3B28-43CF-96F6-69912B4494F9}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73B2A566-D9EE-485B-91C3-344FA045B3F3}
+	EndGlobalSection
+EndGlobal
