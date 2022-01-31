@@ -1,0 +1,94 @@
+﻿; Put your Z80 assembly code into code files
+; Define symbols
+LAST_K: .equ #5c08
+MAIN_EX: .equ #12a2
+
+Start:
+	.org #8000
+
+	; Set banner lines
+SetScreen:
+	call ClearScreen
+	ld a, 0b00_010_010
+	ld b, 0
+	call ClearLine
+	ld a, 0b00_110_110
+	ld b, 1
+	call ClearLine
+	ld a, 0b00_101_000
+	ld b, 2
+	call ClearLine
+	ld a, 0b00_100_100
+	ld b, 3
+	call ClearLine
+
+; set banner border area
+Top:
+	ld bc, #200
+	call LongDelay
+	ld a, 2
+	call SetBorder
+	ld a,6
+	call SetBorder
+	ld a, 5
+	call SetBorder
+	ld a, 4
+	call SetBorder
+	ld a, 0
+	call SetBorder
+	halt ;wait for next interruption
+	ld hl, LAST_K
+	ld a, (hl) ; put last keyboard press into A
+	cp #20
+	jr nz, Top ; if not back to the cycle
+	ld a, 7
+	call SetBorder
+	jp MAIN_EX
+
+;set screen to black
+ClearScreen:
+	ld bc, 24 * 32-1 ; #of screen att bytes
+	ld hl, #5800 ; first attr address
+	ld de, #5801 ; next attr address
+	ld (hl), 0 ; black to black
+	ldir ; set all attr bytes
+	ret
+
+; A = attr byte to set
+; B = Line index
+ClearLine:
+	push af ;Save a
+	ld a, b ;multiply line count with 32
+	sla a
+	sla a
+	sla a
+	sla a
+	sla a
+	ld hl, #5800 ;calculate attr address
+	ld d, 0
+	ld e, a
+	add hl, de
+	pop af ; restor a
+	ld b, #20 ; set all 32 attr bytes
+
+SetAttr:
+	ld (hl), a
+	inc hl
+	djnz SetAttr
+	ret
+
+;Set border color
+SetBorder:
+	out (#fe), a
+	ld b, #86
+Delay:
+	djnz Delay
+	ret
+
+;delay code execution
+LongDelay:
+	dec bc
+	ld a, b
+	or c
+	jr nz, LongDelay
+	ret

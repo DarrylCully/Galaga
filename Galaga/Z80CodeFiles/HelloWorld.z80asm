@@ -1,0 +1,47 @@
+﻿; Code file
+.org #8000
+
+jp start
+Hello_TXT:
+	.dm "hello"
+STRING_LENGTH = 5
+ROM_CLS = $0DAF ; ROM address for "Clear Screen"
+COLOR_ATTR = $5800 ; start of color attribute in memory
+ENTER = $0D ; character code for enter key
+BLACK_WHITE = $45 ; black paper, white ink
+start:
+	im 1 ;setting interrupt mode to 1
+	call ROM_CLS ; call clear screen routine from ROM (extended immediate addressing)
+	ld hl, Hello_TXT ; HL = address of string(register, extended immediate addressing)
+	ld b, STRING_LENGTH ;B = length of string (register, immediate addressing)
+
+`loop
+	ld a, (hl) ; A = byte at address in HL(register, indirect)
+	rst $10 ;print character code in A(modified page zero)
+	inc hl ;increment hl to address of next character(register)
+	dec b ;decrement B
+	jr nz, `loop ; if B not zero, jump back to top of loop(condition, relative)
+	ld a, ENTER ; A = Enter character code(registr, immediate)
+	rst $10 ; print enter for new line
+
+	;change color of first character
+	ld a, BLACK_WHITE ; A = black/white color attribute(register, immediate)
+	ld (COLOR_ATTR), a ; color attr (0, 0) = A (extended, register)
+	
+	ld ix, Hello_TXT ; IX = address of string(register, extended immediate)
+	res 5, (ix) ; reset bit 5 of first character(bit, indexed)
+	ld a, (ix) ; A = String[0] (register, index)
+	rst $10 ; print character (modified page zero)
+	ld a, (ix+1) ; A = string[1]
+	rst $10 ; print character (modified page zero)
+	ld a, (ix+2) ; A = string[2]
+	rst $10 ; print character (modified page zero)
+	ld a, (ix+3) ; A = string[3]
+	rst $10 ; print character (modified page zero)
+	ld a, (ix+4) ; A = string[4]
+	rst $10 ; print character (modified page zero)
+	ld a, ENTER
+	rst $10
+
+	ret
+

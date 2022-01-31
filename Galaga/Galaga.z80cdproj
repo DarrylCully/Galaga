@@ -11,6 +11,9 @@
     <Rom Include="Rom\ZxSpectrum48.rom" />
     <DisassAnn Include="Rom\ZxSpectrum48.disann" />
     <Z80Asm Include="Z80CodeFiles\Code.z80asm" />
+    <Z80Asm Include="Z80CodeFiles\DisplayColors.z80asm" />
+    <Z80Asm Include="Z80CodeFiles\HelloWorld.z80asm" />
+    <Z80Asm Include="Z80CodeFiles\MovingData.z80asm" />
     <Z80Test Include="Z80UnitTests\UnitTest.z80test" />
     <Tzx Include="TapeFiles\Welcome.tzx" />
   </ItemGroup>
